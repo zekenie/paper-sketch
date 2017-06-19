@@ -1,0 +1,20 @@
+@import './styles/_vars';
+* {
+}
+
+.app {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+#app-header {
+  background-image: linear-gradient( 135deg, #FEB692 0%, #EA5455 100%);
+  height: $md;
+  padding: $sm;
+  font-size: $md;
+  color: white;
+}
+
+#app-view {
+  padding: $sm;
+  font-size: $sm;
+}
