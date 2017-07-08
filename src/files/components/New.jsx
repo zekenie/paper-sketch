@@ -14,6 +14,7 @@ export default connect(function() {
     get payload() {
       return {
         name: this.state.name,
+        content: '',
         projectId: this.props.projectId,
       };
     }

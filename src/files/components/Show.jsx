@@ -45,6 +45,7 @@ export default connect(mapStateToProps, { loadFile, updateFile })(
         this.props.updateFile(this.props.file.id, {
           content: content,
         });
+        console.log(this.props.compile());
       }, SAVE_INTERVAL);
     }
     
