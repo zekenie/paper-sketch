@@ -6,7 +6,6 @@ import { loadProject } from '../reducer';
 import FileView from '../../files/components/Show';
 import NewFile from '../../files/components/New';
 import compile from '../../build';
-import paper from 'paper';
 
 function mapStateToProps(state, ownProps) {
   const id = ownProps.match.params.id;
@@ -22,6 +21,12 @@ export default connect(mapStateToProps, { loadProject, loadFiles })(
 
     state = {
       showNewFile: false,
+      externalWindowLoaded: false,
+    }
+
+    constructor(props) {
+      super(props);
+      this.scriptChannel = new window.BroadcastChannel('script');
     }
 
     toggleNewFile() {
@@ -37,19 +42,60 @@ export default connect(mapStateToProps, { loadProject, loadFiles })(
     componentDidMount() {
       this.props.loadProject(this.props.id);
       this.props.loadFiles(this.props.id)
+      this.scriptChannel.addEventListener('message', ({ data }) => {
+        switch(data.type) {
+          case 'LOADED':
+            this.sendCode();
+            this.setState({ externalWindowLoaded: true });
+            break;
+        }
+      })
+    }
+
+    sendCode() {
+      const code = compile(this.props.files);
+      this.scriptChannel.postMessage({
+        type: 'SCRIPT',
+        code
+      });
+    }
+
+    openWindow() {
+      // const paperFrameWindow = window.open('about:blank', 'run', 'menubar=no,location=no,resizable=yes,scrollbars=no,status=no');
+      // paperFrameWindow.opener = null;
+      // paperFrameWindow.location = '/paperFrame.html';
+      // const anchor = new HTMLAnchorElement();
+      const anchor = document.createElement('a');
+      anchor.rel = 'noopener noreferrer';
+      anchor.target = '_blank';
+      anchor.href = '/paperFrame.html';
+      anchor.click();
     }
 
     compile() {
-      paper.agent.chrome = false;
-      const code = compile(this.props.files);
-      console.log(code);
-      const scope = new paper.PaperScope();
-      scope.setup(this.canvas);
-      try {
-        scope.execute(code);
-      } catch(e) {
-        console.warn(e);
-      }
+
+      // if (this.lastPaperFrame) {
+      //   this.lastPaperFrame.close();
+      // }
+
+      // paperFrameWindow.onload = function() {
+      //   paperFrameWindow.runScript(code);
+      // }
+
+      // this.lastPaperFrame = paperFrameWindow;
+
+      // const iWin = this.iframe.contentWindow || this.iframe;
+      // const iDoc = this.iframe.contentDocument || this.iframe.contentWindow.document;
+      // iDoc.open()
+
+      // iDoc.close();
+      // const scope = new paper.PaperScope();
+      // scope.setup(this.canvas);
+      // try {
+      //   scope.execute(code);
+      // } catch(e) {
+      //   console.warn(e);
+      // }
     }
 
     render() {
@@ -73,11 +119,12 @@ export default connect(mapStateToProps, { loadProject, loadFiles })(
             }
             <li><button onClick={this.toggleNewFile.bind(this)}>+</button></li>        
           </ul>
+          <button onClick={this.openWindow.bind(this)}>Open Window</button>
           <Route
             path={`${this.props.match.url}/files/:fileId`}
-            component={(props) => <FileView compile={this.compile.bind(this)} project={this.props.project} {...props} />}
+            component={(props) => <FileView project={this.props.project} {...props} />}
           />
-          <canvas ref={el => this.canvas = el} width="500" height="500"/>
+          
         </div>
       )
     }

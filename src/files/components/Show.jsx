@@ -45,7 +45,6 @@ export default connect(mapStateToProps, { loadFile, updateFile })(
         this.props.updateFile(this.props.file.id, {
           content: content,
         });
-        console.log(this.props.compile());
       }, SAVE_INTERVAL);
     }
     
@@ -62,6 +61,10 @@ export default connect(mapStateToProps, { loadFile, updateFile })(
           <AceEditor 
             mode="javascript"
             theme="github"
+            style={{
+              width: '100%',
+              border: '1px solid #eee'
+            }}
             value={this.state.fileContent}
             onChange={this.onTextAreaChange.bind(this)}
             name="UNIQUE_ID_OF_DIV"
