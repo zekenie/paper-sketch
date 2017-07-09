@@ -4,22 +4,25 @@ import Step from './Step';
 window.paper = paper;
 
 export default class Paper extends Step {
-  head(pipelineRun) {
-    pipelineRun.globals.toInject = [
-      ...(pipelineRun.globals.toInject || []),
-      paper.Path,
-    ];
-  }
 
-  body(file) {
-    try {
-      const parsed = paper.PaperScript.compile(file.content);
-      return {
-        ...file,
-        content: parsed.code,
-      };
-    } catch(e) {
-      console.error(e);
-    }
-  }
+  // whole(pipelineRun) {
+
+  // }
+
+  // body(file) {
+  //   try {
+  //     const parsed = paper.PaperScript.compile(file.content, {
+  //       url: file.name,
+  //       source: file.content,
+  //       sourceMaps: true,
+  //     });
+  //     return {
+  //       ...file,
+  //       content: parsed.code,
+  //       map: parsed.map,
+  //     };
+  //   } catch(e) {
+  //     console.error(e);
+  //   }
+  // }
 }

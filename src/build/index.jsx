@@ -1,10 +1,10 @@
 import Pipeline from './Pipeline';
 import Wrap from './Wrap';
-import Paper from './Paper';
+// import Paper from './Paper';
 
 const pipeline = new Pipeline([
-  // Paper,
   Wrap,
+  // Paper,
 ]);
 
 export default function(files) {

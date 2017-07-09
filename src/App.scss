@@ -1,6 +1,4 @@
 @import './styles/_vars';
-* {
-}
 
 .app {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -17,4 +15,21 @@
 #app-view {
   padding: $sm;
   font-size: $sm;
+}
+
+.file-tabs {
+  display: flex;
+  flex-direction: row;
+  .grow {
+    flex-grow: 1;
+  }
+  .control {
+  }
+  .file-tab {
+    padding: $sm;
+    border-bottom: 2px solid #ccc;
+    &.selected {
+      border-bottom: 2px solid black;
+    }
+  }
 }

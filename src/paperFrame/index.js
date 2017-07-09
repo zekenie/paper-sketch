@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import registerServiceWorker from '../registerServiceWorker';
 import paper from 'paper';
+window.paper = paper;
 
 class App extends React.Component {
   constructor(props) {
@@ -13,7 +14,12 @@ class App extends React.Component {
   componentDidMount() {
     this.paperScope.setup(this.canvas);
     try {
-      this.paperScope.execute(this.props.code);
+      const foo = paper.PaperScript.execute(this.props.code, this.paperScope, {
+        url: 'file.js',
+        source: this.props.code,
+        sourceMaps: 'inline'
+      });
+      console.log(foo);
     } catch(e) {
       console.warn(e);
     }

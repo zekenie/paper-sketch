@@ -11,3 +11,14 @@
 #app-view {
   padding: 1rem;
   font-size: 1rem; }
+
+.file-tabs {
+  display: flex;
+  flex-direction: row; }
+  .file-tabs .grow {
+    flex-grow: 1; }
+  .file-tabs .file-tab {
+    padding: 1rem;
+    border-bottom: 2px solid #ccc; }
+    .file-tabs .file-tab.selected {
+      border-bottom: 2px solid black; }

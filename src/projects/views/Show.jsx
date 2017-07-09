@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link, Route } from 'react-router-dom';
+import { NavLink, Link, Route } from 'react-router-dom';
 import { loadFiles } from '../../files/reducer';
 import { loadProject } from '../reducer';
 import FileView from '../../files/components/Show';
@@ -61,41 +61,11 @@ export default connect(mapStateToProps, { loadProject, loadFiles })(
     }
 
     openWindow() {
-      // const paperFrameWindow = window.open('about:blank', 'run', 'menubar=no,location=no,resizable=yes,scrollbars=no,status=no');
-      // paperFrameWindow.opener = null;
-      // paperFrameWindow.location = '/paperFrame.html';
-      // const anchor = new HTMLAnchorElement();
       const anchor = document.createElement('a');
       anchor.rel = 'noopener noreferrer';
       anchor.target = '_blank';
       anchor.href = '/paperFrame.html';
       anchor.click();
-    }
-
-    compile() {
-
-      // if (this.lastPaperFrame) {
-      //   this.lastPaperFrame.close();
-      // }
-
-      // paperFrameWindow.onload = function() {
-      //   paperFrameWindow.runScript(code);
-      // }
-
-      // this.lastPaperFrame = paperFrameWindow;
-
-      // const iWin = this.iframe.contentWindow || this.iframe;
-      // const iDoc = this.iframe.contentDocument || this.iframe.contentWindow.document;
-      // iDoc.open()
-
-      // iDoc.close();
-      // const scope = new paper.PaperScope();
-      // scope.setup(this.canvas);
-      // try {
-      //   scope.execute(code);
-      // } catch(e) {
-      //   console.warn(e);
-      // }
     }
 
     render() {
@@ -109,17 +79,16 @@ export default connect(mapStateToProps, { loadProject, loadFiles })(
           }
           <Link to="/projects">Back</Link>
           <h2>{this.props.project.name}</h2>
-          <ul>
+          <div className="file-tabs">
             {
               this.props.files.map(file => 
-                <li key={file.id}>
-                  <Link to={`${this.props.match.url}/files/${file.id}`}>{file.name}</Link>
-                </li>
+                <NavLink key={file.id} className="file-tab" activeClassName="selected" to={`${this.props.match.url}/files/${file.id}`}>{file.name}</NavLink>
               )
             }
-            <li><button onClick={this.toggleNewFile.bind(this)}>+</button></li>        
-          </ul>
-          <button onClick={this.openWindow.bind(this)}>Open Window</button>
+            <div className="grow"></div>
+            <div className="control"><button onClick={this.openWindow.bind(this)}>Open Window</button></div>
+            <div className="control"><button onClick={this.toggleNewFile.bind(this)}>+</button></div>        
+          </div>
           <Route
             path={`${this.props.match.url}/files/:fileId`}
             component={(props) => <FileView project={this.props.project} {...props} />}
