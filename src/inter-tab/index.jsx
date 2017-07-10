@@ -1,5 +1,5 @@
 import uuidv4  from 'uuid/v4';
-import EventEmitter from 'event-emitter';
+import { EventEmitter } from 'events';
 const chanSym = Symbol('channel');
 const onRequest = Symbol('onRequest');
 
@@ -11,18 +11,6 @@ class Request {
   }
 
   id = uuidv4()
-
-  get promise() {
-    return new Promise((resolve, reject) => {
-      onResp = (payload) => {
-        if (payload.id === this.id) {
-          this.channel.off('incoming', onResp);
-          resolve(payload);
-        }
-      };
-      this.channel.on('response', onResp);
-    });
-  }
 
   toJSON() {
     return {
@@ -36,9 +24,10 @@ class Request {
 }
 
 class Response {
-  constructor(reqData, channel) {
+  constructor(req, channel) {
     this.channel = channel;
-    this.reqId = reqData.id;
+    this.request = req;
+    this.reqId = req.id;
   }
 
   send(payload) {
@@ -50,41 +39,48 @@ class Response {
   }
 }
 
-class Channel extends EventEmitter {
+export class Channel extends EventEmitter {
   constructor(name) {
     super();
     this.name = name;
 
+    this[chanSym] = new window.BroadcastChannel(this.name)
     this.setupListeners();
   }
 
+  openRequests = {}
   id = uuidv4()
   routes = {}
-  [chanSym] = new window.BroadcastChannel(this.name)
 
   send(path, data = {}) {
     const req = new Request(path, data, this);
     this.write(req.toJSON());
-    return req.promise;    
+    const p = new Promise((resolve, reject) => {
+      this.openRequests[req.id] = resolve;
+    })
+    return p;
   }
 
   write(body) {
+    console.log('<--', body);
     this[chanSym].postMessage(body);
   }
 
   [onRequest](data) {
     if (data.path in this.routes) {
       const res = new Response(data, this)
-      this.routes[data.path](data, res);
+      this.routes[data.path](res);
     }
   }
 
   route(path, handler) {
     this.routes[path] = handler;
+    return this;
   }
 
   setupListeners() {
     this[chanSym].addEventListener('message', ({ data }) => {
+      console.log('-->', data);
       switch (data.type) {
         case 'connect':
           this.emit('connect', data.id);
@@ -96,7 +92,7 @@ class Channel extends EventEmitter {
           this[onRequest](data);
           break;
         case 'response':
-          this.emit('response', data);
+          this.openRequests[data.id] && this.openRequests[data.id]()
           break;
       }
     });

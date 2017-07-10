@@ -9,16 +9,36 @@
   color: white; }
 
 #app-view {
-  padding: 1rem;
+  font-size: 1rem; }
+
+.grow {
+  flex-grow: 1; }
+
+.heading {
+  display: flex;
+  padding: 0 1rem;
+  align-items: center;
+  flex-direction: row; }
+  .heading .back {
+    text-decoration: none; }
+  .heading .title {
+    padding: calc(1rem / 1.5);
+    font-size: calc(1rem * 1.5); }
+
+.control button {
   font-size: 1rem; }
 
 .file-tabs {
   display: flex;
-  flex-direction: row; }
-  .file-tabs .grow {
-    flex-grow: 1; }
+  align-items: center;
+  flex-direction: row;
+  border-top: 1px solid #ccc; }
+  .file-tabs .new-file {
+    margin-left: 1rem;
+    cursor: pointer; }
   .file-tabs .file-tab {
-    padding: 1rem;
-    border-bottom: 2px solid #ccc; }
+    text-decoration: none;
+    color: #ccc;
+    padding: 1rem; }
     .file-tabs .file-tab.selected {
-      border-bottom: 2px solid black; }
+      color: black; }

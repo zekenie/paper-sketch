@@ -1,6 +1,4 @@
 
-import { SourceMapGenerator } from 'source-map';
-import mergeSourceMaps from 'merge-source-map'
 import Step from './Step';
 
 export default class wrap extends Step {
@@ -11,21 +9,8 @@ export default class wrap extends Step {
   }
 
   body(file) {
-    // const map = new SourceMapGenerator({ file: file.name });
-    // map.addMapping({
-    //   source: file.name,
-    //   original: {
-    //     line: 1,
-    //     column: 1
-    //   },
-    //   generated: {
-    //     line: 2,
-    //     column: 1,
-    //   },
-    // });
     return {
       ...file,
-      // map: mergeSourceMaps(file.map, map.toJSON()),
       content: `wrapped['${file.name}'] = function(module, require) {
 ${file.content}
       };

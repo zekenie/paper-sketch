@@ -13,23 +13,48 @@
 }
 
 #app-view {
-  padding: $sm;
   font-size: $sm;
+}
+
+.grow {
+  flex-grow: 1;
+}
+
+.heading {
+  display: flex;
+  padding: 0 $sm;
+  align-items: center;
+  flex-direction: row;
+  .back {
+    text-decoration: none;
+  }
+  .title {
+    padding: $xs;
+    font-size: $md;
+  }
+}
+
+.control {
+  button {
+    font-size: $sm;
+  }
 }
 
 .file-tabs {
   display: flex;
+  align-items: center;  
   flex-direction: row;
-  .grow {
-    flex-grow: 1;
-  }
-  .control {
+  border-top: 1px solid #ccc;
+  .new-file {
+    margin-left: $sm;
+    cursor: pointer;
   }
   .file-tab {
+    text-decoration: none;
+    color: #ccc;
     padding: $sm;
-    border-bottom: 2px solid #ccc;
     &.selected {
-      border-bottom: 2px solid black;
+      color: black;
     }
   }
 }

@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import registerServiceWorker from '../registerServiceWorker';
 import paper from 'paper';
+import { Channel } from '../inter-tab';
+
 window.paper = paper;
 
 class App extends React.Component {
@@ -32,23 +34,43 @@ class App extends React.Component {
   }
 }
 
-const scriptChannel = new window.BroadcastChannel('script');
-
-scriptChannel.addEventListener('message', ({ data }) => {
-  switch (data.type) {
-    case 'SCRIPT':
+const channel = new Channel('foo')
+  .route('code', (res) => {
+    try {
       const el = document.getElementById('root');
       ReactDOM.unmountComponentAtNode(el);
-      ReactDOM.render(<App code={data.code} />, el);
-      // send reply?
-      break;
-    case 'PING':
-      scriptChannel.postMessage(data);
-      break;
-  }
-});
+      ReactDOM.render(<App code={res.request.payload.code} />, el);
+      res.send({
+        status: 'ok'
+      })
+    } catch(e) {
+      res.send({
+        status: 'error',
+        err: e
+      });
+      throw e;
+    }
+  })
+  .route('ping', console.log.bind(console, 'ping'));
 
-scriptChannel.postMessage({ type: 'LOADED' });
+channel.send('loaded', {});
+
+window.addEventListener('beforeunload', () => channel.send('unloaded', {}));
+
+// const scriptChannel = new window.BroadcastChannel('script');
+
+// scriptChannel.addEventListener('message', ({ data }) => {
+//   switch (data.type) {
+//     case 'SCRIPT':
+//       // send reply?
+//       break;
+//     case 'PING':
+//       scriptChannel.postMessage(data);
+//       break;
+//   }
+// });
+
+// scriptChannel.postMessage({ type: 'LOADED' });
 
 
 registerServiceWorker();
