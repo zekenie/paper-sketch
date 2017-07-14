@@ -7,7 +7,9 @@ import FileView from '../../files/components/Show';
 import NewFile from '../../files/components/New';
 import compile from '../../build';
 import { Channel } from '../../inter-tab';
+import Jasmine from 'jasmine-core';
 
+window.Jasmine = Jasmine;
 function mapStateToProps(state, ownProps) {
   const id = ownProps.match.params.id;
   return {

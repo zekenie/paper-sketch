@@ -14,6 +14,11 @@ export default class wrap extends Step {
       content: `wrapped['${file.name}'] = function(module, require) {
 ${file.content}
       };
+      `,
+      testContent: `wrapped['__test__${file.name}'] = function(module, require) {
+        const module = require('${file.name}');
+${file.testContent}
+      };
       `
     };
   }
@@ -37,7 +42,15 @@ ${file.content}
       };
 
       // run first script
-      require(Object.keys(wrapped)[0]);
+      if(window.__test__) {
+        for (const name of Object.keys('wrapped')) {
+          if (name.startsWith('__test__')) {
+            require(name);
+          }
+        }
+      } else {
+        require(Object.keys(wrapped)[0]);
+      }
     
     `;
   }

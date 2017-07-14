@@ -3,9 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "chai": "^4.1.0",
     "convert-source-map": "^1.5.0",
     "events": "^1.1.1",
+    "jasmine": "^2.6.0",
     "merge-source-map": "^1.0.4",
+    "mocha": "^3.4.2",
     "paper": "^0.11.4",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",

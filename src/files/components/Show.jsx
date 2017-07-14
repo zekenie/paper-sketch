@@ -23,6 +23,7 @@ export default connect(mapStateToProps, { loadFile, updateFile })(
   class FileView extends React.Component {
     state = {
       fileContent: this.props.file.content,
+      testContent: this.props.file.testContent,
     }
 
     componentDidMount() {
@@ -33,26 +34,35 @@ export default connect(mapStateToProps, { loadFile, updateFile })(
       if (nextProps.file.content !== this.state.fileContent) {
         this.setState({
           fileContent: nextProps.file.content,
+          testContent: nextProps.file.testContent || ''
         });
       }
     }
 
-    changeFile(content) {
+    changeFile() {
+      const { fileContent, testContent } = this.state
       if (this.timer) {
         clearTimeout(this.timer);
       }
       this.timer = setTimeout(() => {
         this.props.updateFile(this.props.file.id, {
-          content: content,
+          content: fileContent,
+          testContent,
         });
       }, SAVE_INTERVAL);
     }
     
-    onTextAreaChange(value) {
+    onContentChange(value) {
       this.setState({
         fileContent: value,
-      });
-      this.changeFile(value);
+      }, () => this.changeFile());
+    }
+
+    onTestChange(value) {
+      this.setState({
+        testContent: value,
+      }, () => this.changeFile());
+      
     }
 
     render() {
@@ -66,10 +76,22 @@ export default connect(mapStateToProps, { loadFile, updateFile })(
               border: '1px solid #eee'
             }}
             value={this.state.fileContent}
-            onChange={this.onTextAreaChange.bind(this)}
+            onChange={this.onContentChange.bind(this)}
             name="UNIQUE_ID_OF_DIV"
           />
-          {/*<textarea value={this.state.fileContent} onChange={this.onTextAreaChange.bind(this)}></textarea>*/}
+
+          {/* Tests */}
+          <AceEditor 
+            mode="javascript"
+            theme="github"
+            style={{
+              width: '100%',
+              border: '1px solid #eee'
+            }}
+            value={this.state.testContent}
+            onChange={this.onTestChange.bind(this)}
+            name="UNIQUE_ID_OF_DIV2"
+          />
         </div>
       );
     }

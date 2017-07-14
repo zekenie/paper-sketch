@@ -17,6 +17,10 @@ export const addFiles = (projectId, files) => ({
 
 export const createFile = params =>
   dispatch => {
+    params = {
+      ...params,
+      testContent: '',
+    }
     const file = storage.save(params);
     dispatch(addFile(params.projectId, file));
   };
