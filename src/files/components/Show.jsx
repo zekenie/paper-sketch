@@ -74,6 +74,7 @@ export default connect(mapStateToProps, { loadFile, updateFile })(
               theme="github"
               style={{
                 width: '100%',
+                height: '85vh',
                 border: '1px solid #eee'
               }}
               value={this.state.fileContent}
@@ -89,6 +90,7 @@ export default connect(mapStateToProps, { loadFile, updateFile })(
               theme="github"
               style={{
                 width: '100%',
+                height: '85vh',                
                 border: '1px solid #eee'
               }}
               value={this.state.testContent}

@@ -37,7 +37,7 @@ export default connect(mapStateToProps, { loadProjects })(
     render() {
       return (
         <div>
-          <button onClick={this.toggleModal.bind(this)}>New</button>
+          <button className='pt-button' onClick={this.toggleModal.bind(this)}>New</button>
           { this.state.newModalOpen && <New toggle={this.toggleModal.bind(this)} />}
           <ul>
             {this.props.projects.map(p => 

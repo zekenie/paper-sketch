@@ -10,7 +10,7 @@ export default connect(function() {
     state = {
       name: '',
     }
-
+    
     get payload() {
       return {
         name: this.state.name,
@@ -19,7 +19,8 @@ export default connect(function() {
       };
     }
 
-    save() {
+    save(e) {
+      e.preventDefault();
       this.props.createFile(this.payload);
       this.props.toggle();
     }
@@ -32,14 +33,31 @@ export default connect(function() {
 
     render() {
       return (
-        <Modal isOpen contentLabel="New Project">
+        <Modal
+          isOpen
+          contentLabel="New Project"
+          styles={{
+            overlay : {
+              position          : 'fixed',
+              top               : 0,
+              left              : 0,
+              right             : 0,
+              bottom            : 0,
+              backgroundColor   : 'rgba(255, 255, 255, 0.75)'
+            },
+
+          }}
+        >
           <h1>New File</h1>
-          <input
-            value={this.state.name}
-            onChange={this.makeKeyHandler('name').bind(this)}
-          />
+          <form onSubmit={this.save.bind(this)}>
+            <input
+              autoFocus
+              value={this.state.name}
+              onChange={this.makeKeyHandler('name').bind(this)}
+            />
+            <button onClick={this.save.bind(this)}>Create</button>
+          </form>
           <button onClick={this.props.toggle}>Cancel</button>
-          <button onClick={this.save.bind(this)}>Create</button>
         </Modal>
         )
     }
