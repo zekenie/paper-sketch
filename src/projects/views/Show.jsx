@@ -7,9 +7,7 @@ import FileView from '../../files/components/Show';
 import NewFile from '../../files/components/New';
 import compile from '../../build';
 import { Channel } from '../../inter-tab';
-import Jasmine from 'jasmine-core';
 
-window.Jasmine = Jasmine;
 function mapStateToProps(state, ownProps) {
   const id = ownProps.match.params.id;
   return {
@@ -25,12 +23,12 @@ export default connect(mapStateToProps, { loadProject, loadFiles })(
     state = {
       showNewFile: false,
       externalWindowLoaded: false,
+      externalTestsLoaded: false
     }
 
     constructor(props) {
       super(props);
       this.channel = new Channel('foo');
-      // this.scriptChannel = new window.BroadcastChannel('script');
     }
 
     toggleNewFile() {
@@ -54,6 +52,13 @@ export default connect(mapStateToProps, { loadProject, loadFiles })(
             status: 'ok',
           });
         })
+        .route('tests-loaded', (res) => {
+          this.sendCode();
+          this.setState({ externalTestsLoaded: true });
+          res.send({
+            status: 'ok',
+          });
+        })
         .route('unloaded', (res) => {
           this.setState({ externalWindowLoaded: false });
           res.send({ status: 'ok' });
@@ -68,14 +73,22 @@ export default connect(mapStateToProps, { loadProject, loadFiles })(
       .catch(console.error.bind(console));
     }
 
-    openWindow() {
-      if (this.state.externalWindowLoaded) {
+    openWindow(type) {
+      if (type === 'program' && this.state.externalWindowLoaded) {
         return this.sendCode();
       }
+      if (type === 'test' && this.state.externalTestsLoaded) {
+        return this.sendCode();        
+      }
+
+      const url = {
+        program: 'paperFrame',
+        test: 'testRunner'
+      }[type];
       const anchor = document.createElement('a');
       anchor.rel = 'noopener noreferrer';
       anchor.target = '_blank';
-      anchor.href = '/paperFrame.html';
+      anchor.href = `/${url}.html`;
       anchor.click();
     }
 
@@ -94,7 +107,10 @@ export default connect(mapStateToProps, { loadProject, loadFiles })(
             {' '}
             <div className="title">{this.props.project.name}</div>
             <div className="grow"></div>
-            <div className="control"><button onClick={this.openWindow.bind(this)}>⚡️ Run</button></div>
+            <div className="control">
+              <button onClick={this.openWindow.bind(this, 'program')}>⚡️ Run</button>
+              <button onClick={this.openWindow.bind(this, 'test')}>Run Tests</button>
+            </div>
           </div>
           <div className="file-tabs">
             {

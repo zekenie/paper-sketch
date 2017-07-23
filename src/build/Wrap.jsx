@@ -16,7 +16,7 @@ ${file.content}
       };
       `,
       testContent: `wrapped['__test__${file.name}'] = function(module, require) {
-        const module = require('${file.name}');
+        module = require('${file.name}');
 ${file.testContent}
       };
       `
@@ -43,7 +43,7 @@ ${file.testContent}
 
       // run first script
       if(window.__test__) {
-        for (const name of Object.keys('wrapped')) {
+        for (const name of Object.keys(wrapped)) {
           if (name.startsWith('__test__')) {
             require(name);
           }

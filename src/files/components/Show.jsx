@@ -5,7 +5,7 @@ import brace from 'brace';
 import AceEditor from 'react-ace';
 import 'brace/mode/javascript';
 import 'brace/theme/github';
-
+import { Grid } from 'grid-styled';
 
 const SAVE_INTERVAL = 500;
 
@@ -68,30 +68,34 @@ export default connect(mapStateToProps, { loadFile, updateFile })(
     render() {
       return (
         <div>
-          <AceEditor 
-            mode="javascript"
-            theme="github"
-            style={{
-              width: '100%',
-              border: '1px solid #eee'
-            }}
-            value={this.state.fileContent}
-            onChange={this.onContentChange.bind(this)}
-            name="UNIQUE_ID_OF_DIV"
-          />
+          <Grid width={1/2}>
+            <AceEditor 
+              mode="javascript"
+              theme="github"
+              style={{
+                width: '100%',
+                border: '1px solid #eee'
+              }}
+              value={this.state.fileContent}
+              onChange={this.onContentChange.bind(this)}
+              name="UNIQUE_ID_OF_DIV"
+            />
+          </Grid>
 
           {/* Tests */}
-          <AceEditor 
-            mode="javascript"
-            theme="github"
-            style={{
-              width: '100%',
-              border: '1px solid #eee'
-            }}
-            value={this.state.testContent}
-            onChange={this.onTestChange.bind(this)}
-            name="UNIQUE_ID_OF_DIV2"
-          />
+          <Grid width={1/2}>
+            <AceEditor 
+              mode="javascript"
+              theme="github"
+              style={{
+                width: '100%',
+                border: '1px solid #eee'
+              }}
+              value={this.state.testContent}
+              onChange={this.onTestChange.bind(this)}
+              name="UNIQUE_ID_OF_DIV2"
+            />
+          </Grid>
         </div>
       );
     }
