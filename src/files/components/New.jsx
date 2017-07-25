@@ -1,7 +1,7 @@
-import Modal from 'react-modal';
 import React from 'react';
 import { connect } from 'react-redux';
 import { createFile } from '../reducer';
+import { Dialog } from "@blueprintjs/core";
 
 export default connect(function() {
   return {};
@@ -33,32 +33,31 @@ export default connect(function() {
 
     render() {
       return (
-        <Modal
+        <Dialog
+          onClose={this.props.toggle}
           isOpen
-          contentLabel="New Project"
-          styles={{
-            overlay : {
-              position          : 'fixed',
-              top               : 0,
-              left              : 0,
-              right             : 0,
-              bottom            : 0,
-              backgroundColor   : 'rgba(255, 255, 255, 0.75)'
-            },
-
-          }}
+          title="New File"
         >
-          <h1>New File</h1>
-          <form onSubmit={this.save.bind(this)}>
-            <input
-              autoFocus
-              value={this.state.name}
-              onChange={this.makeKeyHandler('name').bind(this)}
-            />
-            <button onClick={this.save.bind(this)}>Create</button>
-          </form>
-          <button onClick={this.props.toggle}>Cancel</button>
-        </Modal>
+          <div className="pt-dialog-body">
+            <form onSubmit={this.save.bind(this)}>
+              <label className="pt-label">
+                Name
+                <input
+                  className="pt-input"
+                  value={this.state.name}
+                  autoFocus
+                  onChange={this.makeKeyHandler('name').bind(this)}
+                />
+              </label>
+              
+            </form>
+          </div>
+          <div className="pt-dialog-footer">
+              <div className="pt-dialog-footer-actions">
+                  <button className="pt-button" onClick={this.save.bind(this)}>Create</button>
+              </div>
+          </div>
+        </Dialog>
         )
     }
   }

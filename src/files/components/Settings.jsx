@@ -1,7 +1,7 @@
-import Modal from 'react-modal';
 import React from 'react';
 import { connect } from 'react-redux';
 import { updateFile, removeFile } from '../reducer';
+import { Dialog } from "@blueprintjs/core";
 
 export default connect(function() {
   return {};
@@ -38,16 +38,32 @@ export default connect(function() {
 
     render() {
       return (
-        <Modal isOpen contentLabel="File Settings">
-          <h1>File settings</h1>
-          <input
-            value={this.state.name}
-            onChange={this.makeKeyHandler('name').bind(this)}
-          />
-          <button onClick={this.props.toggle}>Cancel</button>
-          <button onClick={this.save.bind(this)}>Save</button>
-          <button onClick={this.delete.bind(this)}>Delete File</button>
-        </Modal>
+        <Dialog
+          onClose={this.props.toggle}
+          isOpen
+          title="File Settings"
+        >
+          <div className="pt-dialog-body">
+            <form onSubmit={this.save.bind(this)}>
+              <label className="pt-label">
+                Name
+                <input
+                  className="pt-input"
+                  value={this.state.name}
+                  autoFocus
+                  onChange={this.makeKeyHandler('name').bind(this)}
+                />
+              </label>
+              
+            </form>
+          </div>
+          <div className="pt-dialog-footer">
+            <div className="pt-dialog-footer-actions">
+              <button className="pt-button pt-intent-primary" onClick={this.save.bind(this)}>Save</button>
+              <button className="pt-button pt-intent-danger" onClick={this.delete.bind(this)}>Delete File</button>
+            </div>
+          </div>
+        </Dialog>
         )
     }
   }

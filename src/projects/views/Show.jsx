@@ -9,6 +9,7 @@ import FileSettingsModal from '../../files/components/Settings';
 import ProjectSettings from '../components/Settings';
 import compile from '../../build';
 import { Channel } from '../../inter-tab';
+import { Button } from "@blueprintjs/core";
 
 function mapStateToProps(state, ownProps) {
   const id = ownProps.match.params.id;
@@ -122,14 +123,14 @@ export default connect(mapStateToProps, { loadProject, loadFiles })(
           }
           
           <div className="heading">
-            <Link className="back" to="/projects">⬅️</Link>
+            <Link className="back pt-icon-arrow-left" to="/projects"></Link>
             {' '}
             <div className="title">{this.props.project.name}</div>
             <div className="grow"></div>
-            <div className="control">
-              <button onClick={this.openWindow.bind(this, 'program')}>⚡️ Run</button>
-              <button onClick={this.openWindow.bind(this, 'test')}>✅ Run Tests</button>
-              <button onClick={this.toggleSettingsModal.bind(this)}>️⚙️</button>
+            <div className="control pt-button-group">
+              <Button iconName="eye-open" onClick={this.openWindow.bind(this, 'program')}>Run</Button>
+              <Button iconName="endorsed" onClick={this.openWindow.bind(this, 'test')}>Run Tests</Button>
+              <Button iconName="cog" onClick={this.toggleSettingsModal.bind(this)}>️</Button>
             </div>
           </div>
           <div className="file-tabs">
@@ -146,7 +147,7 @@ export default connect(mapStateToProps, { loadProject, loadFiles })(
                 </NavLink>
               )
             }
-            <div className="control new-file"><a onClick={this.toggleNewFile.bind(this)}>🐣</a></div>        
+            <div className="control new-file"><Button iconName="new-object" onClick={this.toggleNewFile.bind(this)}></Button></div>        
           </div>
           <Switch>
             <Route

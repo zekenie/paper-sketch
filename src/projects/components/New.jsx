@@ -1,10 +1,7 @@
-import Modal from 'react-modal';
 import React from 'react';
 import { connect } from 'react-redux';
 import { createProject } from '../reducer';
-import {
-    Dialog
-} from "@blueprintjs/core";
+import { Dialog } from "@blueprintjs/core";
 
 export default connect(function() {
   return {};
@@ -32,17 +29,24 @@ export default connect(function() {
 
     render() {
       return (
-        <Dialog isOpen={true} title="New Project">
+        <Dialog isOpen={true} title="New Project" onClose={this.props.toggle}>
           <div className="pt-dialog-body">
             <form onSubmit={this.save.bind(this)}>
-              <input
-                value={this.state.name}
-                autoFocus
-                onChange={this.makeKeyHandler('name').bind(this)}
-              />
-              <button onClick={this.save.bind(this)}>Create</button>
+              <label className="pt-label">
+                Name
+                <input
+                  className="pt-input"
+                  value={this.state.name}
+                  autoFocus
+                  onChange={this.makeKeyHandler('name').bind(this)}
+                />
+              </label>
             </form>
-            <button onClick={this.props.toggle}>Cancel</button>
+          </div>
+          <div className="pt-dialog-footer">
+              <div className="pt-dialog-footer-actions">
+                  <button className="pt-button" onClick={this.save.bind(this)}>Create</button>
+              </div>
           </div>
         </Dialog>
         )
