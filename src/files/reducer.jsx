@@ -17,6 +17,10 @@ export const addFiles = (projectId, files) => ({
 
 export const createFile = params =>
   dispatch => {
+    params = {
+      ...params,
+      testContent: '',
+    }
     const file = storage.save(params);
     dispatch(addFile(params.projectId, file));
   };
@@ -48,6 +52,7 @@ export const removeFile = (projectId, id) =>
     storage.remove(id);
     dispatch({
       type: REMOVE_FILE,
+      projectId,
       id
     });
   };
@@ -78,9 +83,9 @@ export default function reducer(state = {}, action) {
         ...state,
         [action.projectId]: {
           ...(state[action.projectId] || {}),
-          [action.fileId]: undefined,
+          [action.id]: undefined,
         }
-      }
+      };
     default:
       return state;
   }

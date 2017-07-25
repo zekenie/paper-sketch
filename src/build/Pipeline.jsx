@@ -42,11 +42,13 @@ class PipelineRun {
       .map(f => 
         f.content)
       .join('\n') +
+
+    this.files.map(f => f.testContent).join('\n') +
+
     this.tail.join('\n') +
     `
     ${convertSourceMap.fromObject(this.map()).toComment()}`
     ;
-    console.log(src);
     return src;
   }
 

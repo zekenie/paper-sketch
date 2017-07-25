@@ -61,6 +61,12 @@ module.exports = {
       require.resolve('react-error-overlay'),
       paths.paperFrameJs,
     ],
+    testRunner: [
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      require.resolve('./polyfills'),
+      require.resolve('react-error-overlay'),
+      paths.testRunnerJs,
+    ],
   },
   output: {
     // Next line is not used in dev but WebpackDevServer crashes without it:

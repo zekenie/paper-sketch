@@ -1,35 +1,48 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { createProject } from '../reducer';
+import { updateProject, removeProject } from '../reducer';
 import { Dialog } from "@blueprintjs/core";
 
 export default connect(function() {
   return {};
-}, { createProject })(
+}, { updateProject, removeProject })(
   class New extends React.Component {
     state = {
-      name: '',
+      name: this.props.project.name,
     }
 
     get payload() {
-      return { name: this.state.name };
+      return {
+        name: this.state.name,
+      };
     }
 
-    save(e) {
-      e.preventDefault();
-      this.props.createProject(this.payload);
+    save() {
+      this.props.updateProject(this.props.project.id, this.payload);
+      this.props.toggle();
+    }
+
+    delete() {
+      if (!window.confirm('are you sure you want to delete ' + this.props.project.name + '?')) {
+        return;
+      }
+      this.props.removeProject(this.props.project.id);
       this.props.toggle();
     }
 
     makeKeyHandler(field) {
       return e => this.setState({
-        [field]: e.target.value
+        [field]: e.target.value,
       });
     }
 
     render() {
       return (
-        <Dialog isOpen={true} title="New Project" onClose={this.props.toggle}>
+       <Dialog
+          onClose={this.props.toggle}
+          isOpen
+          title="Project Settings"
+        >
           <div className="pt-dialog-body">
             <form onSubmit={this.save.bind(this)}>
               <label className="pt-label">
@@ -41,12 +54,13 @@ export default connect(function() {
                   onChange={this.makeKeyHandler('name').bind(this)}
                 />
               </label>
+              
             </form>
           </div>
           <div className="pt-dialog-footer">
-              <div className="pt-dialog-footer-actions">
-                  <button className="pt-button" onClick={this.save.bind(this)}>Create</button>
-              </div>
+            <div className="pt-dialog-footer-actions">
+              <button className="pt-button pt-intent-primary" onClick={this.save.bind(this)}>Save</button>
+            </div>
           </div>
         </Dialog>
         )
