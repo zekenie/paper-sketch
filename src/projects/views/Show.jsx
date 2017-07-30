@@ -5,6 +5,7 @@ import { loadFiles } from '../../files/reducer';
 import { loadProject } from '../reducer';
 import FileView from '../../files/components/Show';
 import NewFile from '../../files/components/New';
+import ShareModal from '../../share/components/Modal';
 import FileSettingsModal from '../../files/components/Settings';
 import ProjectSettings from '../components/Settings';
 import compile from '../../build';
@@ -28,6 +29,7 @@ export default connect(mapStateToProps, { loadProject, loadFiles })(
       externalWindowLoaded: false,
       externalTestsLoaded: false,
       showSettingsModal: false,
+      showShareModal: false,
       fileSettings: null,
     }
 
@@ -45,6 +47,12 @@ export default connect(mapStateToProps, { loadProject, loadFiles })(
     toggleSettingsModal() {
       this.setState({
         showSettingsModal: !this.state.showSettingsModal,
+      });
+    }
+
+    toggleShareModal() {
+      this.setState({
+        showShareModal: !this.state.showShareModal,
       });
     }
 
@@ -121,6 +129,10 @@ export default connect(mapStateToProps, { loadProject, loadFiles })(
           { this.state.fileSettings &&
             <FileSettingsModal file={this.state.fileSettings} toggle={() => this.setState({ fileSettings: null })} />
           }
+
+          { this.state.showShareModal &&
+            <ShareModal project={this.props.project} files={this.props.files} toggle={this.toggleShareModal.bind(this)} />
+          }
           
           <div className="heading">
             <Link className="back pt-icon-arrow-left" to="/projects"></Link>
@@ -130,7 +142,8 @@ export default connect(mapStateToProps, { loadProject, loadFiles })(
             <div className="control pt-button-group">
               <Button iconName="eye-open" onClick={this.openWindow.bind(this, 'program')}>Run</Button>
               <Button iconName="endorsed" onClick={this.openWindow.bind(this, 'test')}>Run Tests</Button>
-              <Button iconName="cog" onClick={this.toggleSettingsModal.bind(this)}>️</Button>
+              <Button iconName="share" onClick={this.toggleShareModal.bind(this)}>Share</Button>
+              <Button iconName="cog" onClick={this.toggleSettingsModal.bind(this)} />
             </div>
           </div>
           <div className="file-tabs">
