@@ -25,6 +25,15 @@ class App extends React.Component {
     } catch(e) {
       console.warn(e);
     }
+
+    setTimeout(() => {
+      const svg = this.paperScope.project.exportSVG({
+        asString: true
+      });
+
+      channel.send('snapshot', { svg });
+    }, 250);
+
   }
 
   render() {

@@ -41,3 +41,34 @@
     padding: 1rem; }
     .file-tabs .file-tab.selected {
       color: black; }
+
+.projects-container .project {
+  position: relative;
+  overflow: hidden; }
+  .projects-container .project:hover .overlay {
+    display: block; }
+  .projects-container .project .no-overlay {
+    color: rgba(244, 22, 74, 0.8);
+    font-weight: bold;
+    cursor: pointer;
+    padding: 1em;
+    font-size: 2em;
+    text-transform: uppercase;
+    width: 100%;
+    height: 100%;
+    border: 20px solid rgba(244, 22, 74, 0.8); }
+  .projects-container .project .overlay {
+    position: absolute;
+    display: none;
+    background: rgba(244, 22, 74, 0.8);
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    color: white;
+    font-size: 2em;
+    text-transform: uppercase;
+    font-weight: bold;
+    padding: 1em;
+    margin: 1em;
+    cursor: pointer; }

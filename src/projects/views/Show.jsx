@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { NavLink, Link, Route, Switch, Redirect } from 'react-router-dom';
 import { loadFiles } from '../../files/reducer';
-import { loadProject } from '../reducer';
+import { loadProject, updateProject } from '../reducer';
 import FileView from '../../files/components/Show';
 import NewFile from '../../files/components/New';
 import ShareModal from '../../share/components/Modal';
@@ -21,7 +21,7 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-export default connect(mapStateToProps, { loadProject, loadFiles })(
+export default connect(mapStateToProps, { loadProject, loadFiles, updateProject })(
   class ProjectShow extends React.Component {
 
     state = {
@@ -78,10 +78,20 @@ export default connect(mapStateToProps, { loadProject, loadFiles })(
             status: 'ok',
           });
         })
+        .route('snapshot', (res) => {
+          console.log('getting snapshot', res.request.payload.svg)
+          this.props.updateProject(this.props.project.id, {
+            svg: res.request.payload.svg,
+          });
+        })
         .route('unloaded', (res) => {
           this.setState({ externalWindowLoaded: false });
           res.send({ status: 'ok' });
         })
+    }
+
+    componentWillUnmount() {
+      this.channel.close();
     }
 
     sendCode() {

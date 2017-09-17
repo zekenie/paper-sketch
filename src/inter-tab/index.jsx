@@ -52,6 +52,10 @@ export class Channel extends EventEmitter {
   id = uuidv4()
   routes = {}
 
+  close() {
+    this[chanSym].close();
+  }
+
   send(path, data = {}) {
     const req = new Request(path, data, this);
     this.write(req.toJSON());

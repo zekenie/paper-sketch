@@ -1,7 +1,9 @@
 import React from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { Dialog, Switch, Tooltip } from "@blueprintjs/core";
+import { Dialog, Switch, Tooltip, Intent } from "@blueprintjs/core";
+import { toaster } from '../../toaster';
+import { encode } from '../../files/githubEncoder';
 
 export default connect(function() {
   return {};
@@ -10,7 +12,8 @@ export default connect(function() {
     state = {
       userLoaded: false,
       userLoggedIn: false,
-      public: false
+      public: false,
+      shareButtonDisabled: false,
     }
 
     async componentDidMount() {
@@ -33,21 +36,27 @@ export default connect(function() {
       return {
         public: this.state.public,
         id: this.props.project.id,
-        project: this.props.project,
-        files: this.props.files.reduce(
-          (files, file) => ({
-            ...files,
-            [file.name]: { content: file.content },
-            [`__test__${file.name}`]: { content: file.testContent },
-          }),
-          {}
-        )
+        project: {
+          name: this.props.project.name,
+          id: this.props.project.id,
+        },
+        files: encode(this.props.files),
       };
     }
 
     async save(e) {
       e.preventDefault();
+      this.setState({
+        shareButtonDisabled: true,
+      });
       await axios.post('/api/projects', this.payload);
+      toaster.show({
+        message: 'Gist saved. URLs on your clipboard!',
+        intent: Intent.SUCCESS,
+      });
+      this.setState({
+        shareButtonDisabled: false,
+      });
       this.props.toggle();
     }
 
@@ -111,7 +120,7 @@ export default connect(function() {
       return (
         <div className="pt-dialog-footer">
           <div className="pt-dialog-footer-actions">
-            <button onClick={this.save.bind(this)} className="pt-button">Share</button>
+            <button disabled={this.state.shareButtonDisabled} onClick={this.save.bind(this)} className="pt-button">Share</button>
           </div>
         </div>
       );

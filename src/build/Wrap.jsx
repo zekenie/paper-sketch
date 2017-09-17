@@ -36,6 +36,7 @@ ${file.testContent}
         }
 
         // if no, run the wrapped function
+        // @todo fix this
         exportsCache[path] = Object.assign({}, baseModule)
         wrapped[path](exportsCache[path], require);
         return exportsCache[path].exports;
