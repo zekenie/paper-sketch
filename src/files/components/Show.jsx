@@ -5,7 +5,7 @@ import brace from 'brace';
 import AceEditor from 'react-ace';
 import 'brace/mode/javascript';
 import 'brace/theme/github';
-import { Grid } from 'grid-styled';
+import { Flex } from 'grid-styled';
 
 const SAVE_INTERVAL = 500;
 
@@ -67,8 +67,8 @@ export default connect(mapStateToProps, { loadFile, updateFile })(
 
     render() {
       return (
-        <div>
-          <Grid width={1/2}>
+        <Flex>
+          <Flex width={1/2}>
             <AceEditor 
               mode="javascript"
               theme="github"
@@ -81,10 +81,10 @@ export default connect(mapStateToProps, { loadFile, updateFile })(
               onChange={this.onContentChange.bind(this)}
               name="UNIQUE_ID_OF_DIV"
             />
-          </Grid>
+          </Flex>
 
           {/* Tests */}
-          <Grid width={1/2}>
+          <Flex width={1/2}>
             <AceEditor 
               mode="javascript"
               theme="github"
@@ -97,8 +97,8 @@ export default connect(mapStateToProps, { loadFile, updateFile })(
               onChange={this.onTestChange.bind(this)}
               name="UNIQUE_ID_OF_DIV2"
             />
-          </Grid>
-        </div>
+          </Flex>
+        </Flex>
       );
     }
   }
